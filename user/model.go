@@ -11,6 +11,7 @@ import (
 type User struct {
 	ID         uint                  `gorm:"primaryKey;autoIncrement"`
 	IP         string                `gorm:"not null"`
+	Blocked    bool                  `gorm:"default:false"`
 	Threads    []thread.Thread       `gorm:"foreignKey:ID_User;references:ID"`
 	Subthreads []subthread.Subthread `gorm:"foreignKey:ID_User;references:ID"`
 }
