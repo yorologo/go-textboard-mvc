@@ -11,7 +11,7 @@ import (
 type Thread struct {
 	ID         uint                  `gorm:"primaryKey;autoIncrement"`
 	Post       post.Post             `gorm:"embedded"`
-	Tittle     string                `gorm:"not null"`
+	Title      string                `gorm:"not null"`
 	Subthreads []subthread.Subthread `gorm:"foreignKey:ID_Thread;references:ID"`
 }
 
