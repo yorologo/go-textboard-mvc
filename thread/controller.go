@@ -1,6 +1,8 @@
 package thread
 
 import (
+	"strconv"
+
 	"github.com/yorologo/board/post"
 	"github.com/yorologo/board/user"
 )
@@ -22,8 +24,9 @@ func newThread(ip string, title string, body string) (uint, error) {
 	return 0, error
 }
 
-func getThread(id_thread uint) (Thread, error) {
-	return readThread(id_thread)
+func getThread(id_thread string) (Thread, error) {
+	id, _ := strconv.ParseUint(id_thread, 10, 32)
+	return readThread(uint(id))
 }
 
 func getLastThreads() ([]Thread, error) {

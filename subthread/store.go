@@ -10,9 +10,9 @@ func createSubthread(Subthread *Subthread) (uint, error) {
 	return Subthread.ID, result.Error
 }
 
-func readLastsSubthreads(n int) ([]Subthread, error) {
+func readLastsSubthreads(id_thread uint, n int) ([]Subthread, error) {
 	var Subthread []Subthread
-	result := md.Limit(n).Find(&Subthread)
+	result := md.Where("ID_Thread = ?", id_thread).Limit(n).Find(&Subthread)
 
 	return Subthread, result.Error
 }
