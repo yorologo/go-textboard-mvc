@@ -7,24 +7,25 @@ import (
 	"github.com/gogearbox/gearbox"
 )
 
-type response struct {
-	threads []Thread
-}
-
-func GetRoutes() []*gearbox.Route {
-	gb := gearbox.New()
-
+func GetRoutes(gb gearbox.Gearbox) []*gearbox.Route {
 	routes := []*gearbox.Route{
-		gb.Get("/getlast", func(ctx gearbox.Context) {
-			var res response
-			res.threads, _ = getLastThreads()
-
-			ctx.Set("Access-Control-Allow-Origin", "*")
-			ctx.SendJSON(res)
+		gb.Get("/", func(ctx gearbox.Context) {
+			ctx.SendString("Threads")
 		}),
-		gb.Get("/:id", func(ctx gearbox.Context) {
+		gb.Get("/getlast", func(ctx gearbox.Context) {
+			threads, _ := getLastThreads()
+
+			if threads != nil {
+				ctx.Set("Access-Control-Allow-Origin", "*")
+				ctx.SendJSON(threads)
+			} else {
+				ctx.Context().Response.SetStatusCode(404)
+				ctx.SendString("Empty")
+			}
+		}),
+		gb.Get("/details:idthread", func(ctx gearbox.Context) {
 			var thread Thread
-			thread, _ = getThread(ctx.Param("id"))
+			thread, _ = getThread(ctx.Param("idthread"))
 
 			ctx.Set("Access-Control-Allow-Origin", "*")
 			ctx.SendJSON(thread)
@@ -32,10 +33,14 @@ func GetRoutes() []*gearbox.Route {
 		gb.Post("/new", func(ctx gearbox.Context) {
 			client_ip := realip.FromRequest(ctx.Context())
 
-			thread, _ := newThread(client_ip, ctx.Param("title"), ctx.Param("body"))
-
-			ctx.Context().Response.SetStatusCode(301)
-			ctx.Context().Redirect("/"+fmt.Sprint(thread)+"", 301)
+			thread, error := newThread(client_ip, string(ctx.Context().FormValue("title")), string(ctx.Context().FormValue("body")))
+			if error == nil {
+				// ctx.Context().Response.SetStatusCode(301)
+				// ctx.Context().Redirect("/"+fmt.Sprint(thread)+"", 301)
+				ctx.SendString(fmt.Sprint(thread))
+			} else {
+				panic(error)
+			}
 		}),
 	}
 

@@ -10,7 +10,7 @@ import (
 type Subthread struct {
 	ID        uint      `gorm:"primaryKey;autoIncrement"`
 	Post      post.Post `gorm:"embedded"`
-	ID_Thread uint      `gorm:"not null"`
+	ID_Thread uint
 }
 
 func model() *gorm.DB {

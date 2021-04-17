@@ -12,7 +12,7 @@ func newSubthread(ip string, id_thread string, body string) (uint, error) {
 	IdIp, error := user.ArchiveUser(ip)
 	idthread, _ := strconv.ParseUint(id_thread, 10, 32)
 
-	if error != nil {
+	if error == nil {
 		subthread = &Subthread{
 			Post: post.Post{
 				Body:    body,

@@ -11,7 +11,7 @@ func newThread(ip string, title string, body string) (uint, error) {
 	var thread *Thread
 	IdIp, error := user.ArchiveUser(ip)
 
-	if error != nil {
+	if error == nil {
 		thread = &Thread{
 			Title: title,
 			Post: post.Post{

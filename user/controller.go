@@ -2,7 +2,7 @@ package user
 
 func ArchiveUser(ip string) (uint, error) {
 	user, error := readUser(ip)
-	if error != nil {
+	if user.ID == 0 {
 		newUser := &User{
 			IP: ip,
 		}
